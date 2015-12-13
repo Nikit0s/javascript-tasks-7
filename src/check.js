@@ -10,12 +10,14 @@ var checkAvailableProto = function (object, prototypes) {
 };
 
 var MyObjectPrototype = {
-    checkHasKeys: function (keys) {
+    checkHasKeys: function (keys, contain) {
         if (!(checkAvailableProto(this, [Array.prototype, Object.prototype]))) {
             return;
         }
-        if (keys.length != Object.keys(this).length) {
-            return false;
+        if (!contain) {
+            if (keys.length !== Object.keys(this).length) {
+                return false;
+            }
         }
         var result = true;
         keys.forEach(function (key) {
@@ -38,16 +40,7 @@ var MyObjectPrototype = {
     },
 
     checkContainsKeys: function (keys) {
-        if (!(checkAvailableProto(this, [Array.prototype, Object.prototype]))) {
-            return;
-        }
-        var result = true;
-        keys.forEach(function (key) {
-            if (!(this.hasOwnProperty(key))) {
-                result = false;
-            }
-        }, this);
-        return result;
+        return this.checkHasKeys(keys, true);
     },
 
     checkContainsValues: function (values) {
